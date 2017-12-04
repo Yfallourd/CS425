@@ -25,25 +25,25 @@
 
     <div class="jumbotron">
         <form class="form-signin" action="/customer/account/update" method="post">
-            <label for="inputCustomerID" class="sr-only">Customer ID</label>
-            <input type="number" name="inputCustomerID" id="inputCustomerID" class="form-control" placeholder="ID" required autofocus>
+            <label for="inputCustomerUsername" class="sr-only">Username</label>
+            <input type="text" name="inputCustomerUsername" id="inputCustomerUsername" class="form-control" placeholder="Username" required autofocus>
             <p></p>
-            <label for="inputName" class="sr-only">First Name</label>
-            <input type="name" name="inputName" id="inputName" class="form-control" placeholder="First Name" required autofocus>
-            <label for="inputName" class="sr-only">Middle Name</label>
-            <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Middle Name" required autofocus>
-            <label for="inputName" class="sr-only">Last Name</label>
-            <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Last Name" required autofocus>
+            <label for="inputFName" class="sr-only">First Name</label>
+            <input type="name" name="inputFName" id="inputFName" class="form-control" placeholder="First Name" required autofocus>
+            <label for="inputMName" class="sr-only">Middle Name</label>
+            <input type="name" name="inputMName" id="inputMName" class="form-control" placeholder="Middle Name" required autofocus>
+            <label for="inputLName" class="sr-only">Last Name</label>
+            <input type="name" name="inputLName" id="inputLName" class="form-control" placeholder="Last Name" required autofocus>
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
             <p></p>
             <label for="inputEmail" class="sr-only">Email address</label>
             <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
             <p></p>
-            <label for="inputAddress" class="sr-only">Street address line 1</label>
-            <input type="text" name="inputAddress" id="inputAddress" class="form-control" placeholder="Street address line 1" required>
-            <label for="inputAddress" class="sr-only">Street address line 2</label>
-            <input type="text" name="inputAddress" id="inputAddress" class="form-control" placeholder="Street address line 2" required>
+            <label for="inputAddress1" class="sr-only">Street address line 1</label>
+            <input type="text" name="inputAddress1" id="inputAddress1" class="form-control" placeholder="Street address line 1" required>
+            <label for="inputAddress2" class="sr-only">Street address line 2</label>
+            <input type="text" name="inputAddress2" id="inputAddress2" class="form-control" placeholder="Street address line 2" required>
             <label for="inputCity" class="sr-only">City</label>
             <input type="text" name="inputCity" id="inputCity" class="form-control" placeholder="City" required>
             <label for="inputState" class="sr-only">State</label>
@@ -53,8 +53,6 @@
             <p></p>
             <label for="inputPhone" class="sr-only">Phone number</label>
             <input type="number" name="inputPhone" id="inputPhone" class="form-control" placeholder="Phone number" required>
-            <label for="inputPhone" class="sr-only">Phone number 2</label>
-            <input type="number" name="inputPhone" id="inputPhone" class="form-control" placeholder="Phone number 2" required>
             <input type="submit" value="Submit" href="/main" class="btn btn-lg btn-primary btn-block">
      	    <a href="/main"  class="btn btn-lg btn-primary btn-block">Cancel</a>
         </form>

@@ -4,13 +4,16 @@ import cx_Oracle
 
 app = FlaskAPI(__name__)
 dsnstr = cx_Oracle.makedsn("fourier.cs.iit.edu", "1521", "orcl")
-#connection = cx_Oracle.connect(user="hyang59", password="YOURORACLEPASSWORD", dsn=dsnstr)
+
+
+# connection = cx_Oracle.connect(user="hyang59", password="YOURORACLEPASSWORD", dsn=dsnstr)
 
 @app.route('/')
 def redirect_to_main():
     redirect_to_main = redirect('/main')
     response = app.make_response(redirect_to_main)
     return response
+
 
 @app.route('/main')
 def mainpage():
@@ -25,6 +28,7 @@ def mainpage():
     else:
         return render_template('index_light.html')
 
+
 @app.route('/logout')
 def logout():
     redirect_to_main = redirect('/main')
@@ -33,21 +37,72 @@ def logout():
     response.set_cookie('employee', value='', expires=0)  # Remove cookies
     return response
 
+
 @app.route('/stores')
 def storepage():
-    return render_template('stores.html')
-
-
-@app.route('/customer/order')
-def orderpage():
-    return render_template('order.html')
+    cursor = connection.cursor()
+    querystr = '''
+                select * from store;
+            '''
+    cursor.execute(querystr)
+    stores = [x for x in cursor]
+    return render_template('stores.html', stores=stores)
 
 
 @app.route('/customer/cart')
 def cartpage():
-    return render_template('cart.html')
+    if "auth_user" in request.cookie:
+        cursor = connection.cursor()
+        custID = request.cookie["auth_user"]
+        cartID = None
+        cart = {}
+        querystr = '''
+                select user_id from cart
+                where user_id = {0};
+                '''.format(custID)
+        cursor.execute(querystr)
+        for each in cursor:
+            cartID = each
+        if cartID is None:
+            return "No CART"
+        querystr = '''
+                select tax, price, shipping_price from cart 
+                where user_id = {0};
+                '''.format(cartID)
+        cursor.execute(querystr)
+        for tax, price, sprice in cursor:
+            cart = {"tax": tax, "price": price, "shipping_price": sprice}
+        querystr = '''
+                with current_cart as(
+                select product_id from cartdetail
+                where user_id = {0}
+                )
+                select * 
+                from product 
+                 where product_id in current_cart;
+                '''.format(cartID)
+        cursor.execute(querystr)
+        products = [x for x in cursor]
+        cart["products"] = products
+    else:
+        return "PLEASE LOG IN"
+    return render_template('cart.html', cart=cart)
 
 
+@app.route('/customer/order')
+def orderpage():
+    if "auth_user" in request.cookie:
+        cursor = connection.cursor()
+        custID = request.cookie["auth_user"]
+        querystr = '''
+                select * from order 
+                where user_id = {0};
+                '''.format(custID)
+        cursor.execute(querystr)
+        orders = [x for x in cursor]
+    else:
+        return "PLEASE LOG IN"
+    return render_template('orders.html', orders=orders)
 
 
 @app.route('/customer/signin', methods=['GET', 'POST'])
@@ -69,9 +124,10 @@ def signinpage():
             userid = id
         redirect_to_main = redirect('/main')
         response = app.make_response(redirect_to_main)
-        if not userid == None:
+        if userid is not None:
             response.set_cookie('auth_user', value=userid)  # Add the username arg
         return response
+
 
 @app.route('/customer/signup', methods=['GET', 'POST'])
 def signuppage():
@@ -97,15 +153,18 @@ def signuppage():
                 {4},
                 {5},
             );        
-        '''.format(payload["userid"], payload["firstname"], payload["middlename"],
-                   payload["lastname"], payload["phoneno"], payload["dateofbirth"])
+        '''.format(payload["inputCustomerUsername"], payload["inputFName"], payload["inputMName"],
+                   payload["inputLName"], payload["inputPhone"], payload["dateofbirth"])
         cursor.execute(querystr)
         redirect_to = redirect('customer/signup/success')
         response = app.make_response(redirect_to)
         return response
+
+
 @app.route('/customer/signup/success')
 def successpage():
     return render_template('signup_success.html')
+
 
 @app.route('/test')
 def test():
@@ -114,9 +173,11 @@ def test():
     response.set_cookie('auth_user', value='test')  # Add the username arg
     return response
 
+
 @app.route('/customer/account')
 def accountpage():
     return render_template('update_customerinfo.html')
+
 
 @app.route('/customer/account/update', methods=['GET', 'POST'])
 def accountUpdate():
@@ -145,6 +206,7 @@ def accountUpdate():
         response = app.make_response(redirect_to_main)
         return response
 
+
 @app.route('/employee/signin', methods=['GET', 'PUT'])
 def empSignin():
     if request.method == 'GET':
@@ -157,6 +219,7 @@ def empSignin():
         response.set_cookie('employee', value='True')
         return response
 
+
 @app.route('/employee/product')
 def productCheck():
     if ("employee" in request.cookies) & (request.cookie["employee"] == "True"):
@@ -164,15 +227,13 @@ def productCheck():
     else:
         return "FORBIDDEN"
 
+
 @app.route('/employee/product/update')
 def productUpdate():
     if ("employee" in request.cookies) & (request.cookie["employee"] == "True"):
         return render_template("update_productinfo.html")
     else:
         return "FORBIDDEN"
-
-
-
 
 
 if __name__ == "__main__":
