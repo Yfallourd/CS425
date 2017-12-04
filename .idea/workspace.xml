@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="572994fd-5152-450e-96b6-0862c50c8028" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/targetapp.py" afterPath="$PROJECT_DIR$/targetapp.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/after_sign_in_indexpage_customer.html" afterPath="$PROJECT_DIR$/templates/after_sign_in_indexpage_customer.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/after_sign_in_indexpage_employee.html" afterPath="$PROJECT_DIR$/templates/after_sign_in_indexpage_employee.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/cart.html" afterPath="$PROJECT_DIR$/templates/cart.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/employee_check_product.html" afterPath="$PROJECT_DIR$/templates/employee_check_product.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/index_light.html" afterPath="$PROJECT_DIR$/templates/index_light.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/stores.html" afterPath="$PROJECT_DIR$/templates/stores.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +17,8 @@
       <file leaf-file-name="targetapp.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/targetapp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="99" column="31" lean-forward="false" selection-start-line="99" selection-start-column="31" selection-end-line="99" selection-end-column="31" />
+            <state relative-caret-position="247">
+              <caret line="119" column="38" lean-forward="true" selection-start-line="119" selection-start-column="38" selection-end-line="119" selection-end-column="38" />
               <folding>
                 <element signature="e#0#52#0" expanded="true" />
               </folding>
@@ -209,17 +204,17 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/targetapp.py</url>
-          <line>153</line>
+          <line>191</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/targetapp.py</url>
-          <line>173</line>
+          <line>211</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/targetapp.py</url>
-          <line>111</line>
+          <line>149</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
@@ -298,8 +293,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/targetapp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="99" column="31" lean-forward="false" selection-start-line="99" selection-start-column="31" selection-end-line="99" selection-end-column="31" />
+        <state relative-caret-position="247">
+          <caret line="119" column="38" lean-forward="true" selection-start-line="119" selection-start-column="38" selection-end-line="119" selection-end-column="38" />
           <folding>
             <element signature="e#0#52#0" expanded="true" />
           </folding>

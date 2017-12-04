@@ -97,7 +97,45 @@ def checkout():
     if "auth_user" in request.cookies:
         cursor = connection.cursor()
         custID = request.cookies["auth_user"]
-        return "NOT IMPLEMENTED"
+        orderID = generateID("o")
+        querystr = """
+            insert into orders
+            values (:orderid,
+            current_date,
+            (select price from cart
+            where user_id = :custID),
+            :custID,
+            0)"""
+        cursor.execute(querystr, orderid=orderID, custID=custID)
+        connection.commit()
+        querystr = """
+            insert into orderdetail (order_id, product_id, product_number)
+            select :orderid, product_id, product_number
+            from cartdetail
+            where user_id = :custID"""
+        cursor.execute(querystr, orderid=orderID, custID=custID)
+        connection.commit()
+        querystr = """
+            delete from cartdetail
+            where user_id = :custID"""
+        cursor.execute(querystr, custID=custID)
+        connection.commit()
+        querystr = """
+            update cart
+            set shipping_price = 5,
+            price = shipping_price + (select sum(product_price * product_number)
+            from product natural join cartdetail
+            where user_id = :custID),
+            tax = 0.05*(select sum(product_price * product_number)
+            from product natural join cartdetail
+            where user_id = :custID)
+            where user_id = :custID
+        """
+        cursor.execute(querystr, custID=custID)
+        connection.commit()
+        redirect_to_main = redirect('/customer/cart')
+        response = app.make_response(redirect_to_main)
+        return response
 
 @app.route('/customer/order')
 def orderpage():
