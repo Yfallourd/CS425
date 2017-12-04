@@ -37,7 +37,7 @@
                          <ul class="nav navbar-nav navbar-right">
 
                             <li><a href="/main">Home</a></li>
-                             <li><a href="/order">Order</a></li>
+                             <li><a href="/customer/order">Order</a></li>
                              <li><a href="/customer/account">Update information</a></li>
                              <li><a href="/help">Help</a></li>
                          </ul>
@@ -45,5 +45,9 @@
                 </div>
         </div>
 <div style="position: absolute; left: 10px; top: 100px"> Cart : {{ cart }}</div>
+<div class="wrapper">
+<form action="/checkout">
+	<button type="submit" style="position:absolute;left: 10px;top:200px;background-color:white;margin-left:auto;margin-right:10%;display:block;margin-top:5%;margin-bottom:0%;width:240px;height:60px;font-size:155%">Checkout</button>
+</form>
 </body>
 </html>
