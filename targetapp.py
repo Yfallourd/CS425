@@ -1,6 +1,7 @@
 from flask import request, render_template, redirect
 from flask_api import FlaskAPI, status, response
 import cx_Oracle
+import json
 import time
 
 app = FlaskAPI(__name__)
@@ -47,9 +48,7 @@ def logout():
 @app.route('/stores')
 def storepage():
     cursor = connection.cursor()
-    querystr = '''
-                select * from store;
-            '''
+    querystr = "select store_name from store"
     cursor.execute(querystr)
     stores = [x for x in cursor]
     return render_template('stores.html', stores=stores)
@@ -64,7 +63,7 @@ def cartpage():
         cart = {}
         querystr = '''
                 select user_id from cart
-                where user_id = {0};
+                where user_id = {0}
                 '''.format(custID)
         cursor.execute(querystr)
         for each in cursor:
@@ -73,7 +72,7 @@ def cartpage():
             return "No CART"
         querystr = '''
                 select tax, price, shipping_price from cart 
-                where user_id = {0};
+                where user_id = {0}
                 '''.format(cartID)
         cursor.execute(querystr)
         for tax, price, sprice in cursor:
@@ -85,7 +84,7 @@ def cartpage():
                 )
                 select * 
                 from product 
-                 where product_id in current_cart;
+                 where product_id in current_cart
                 '''.format(cartID)
         cursor.execute(querystr)
         products = [x for x in cursor]
@@ -102,7 +101,7 @@ def orderpage():
         custID = request.cookie["auth_user"]
         querystr = '''
                 select * from order 
-                where user_id = {0};
+                where user_id = {0}
                 '''.format(custID)
         cursor.execute(querystr)
         orders = [x for x in cursor]
@@ -117,21 +116,23 @@ def signinpage():
         return render_template('customer_sign_in.html')
     if request.method == 'POST':
         # SIGN IN LOGIC
-        payload = request.get_json(force=True)
+        payload = request.form
         userid = None
         cursor = connection.cursor()
         querystr = '''
             select user_id from account
-            where username = {0}
-            and password = {1};
-        '''.format(payload["inputUsername"], payload["inputPassword"])
-        cursor.execute(querystr)
+            where username = :username
+            and password = :password
+        '''
+        cursor.execute(querystr, {"username": payload["inputUsername"], "password":payload["inputPassword"]})
+        #if cursor.rowcount == 0:
+        #    return "USER NOT FOUND"
         for id in cursor:
-            userid = id
+            userid = id[0]
         redirect_to_main = redirect('/main')
         response = app.make_response(redirect_to_main)
         if userid is not None:
-            response.set_cookie('auth_user', value=userid)  # Add the username arg
+            response.set_cookie('auth_user', value=userid.encode())  # Add the username arg
         return response
 
 
@@ -139,44 +140,60 @@ def signinpage():
 def signuppage():
     if request.method == "GET":
         return render_template('customer_sign_up.html')
-    elif request.method == "POST":
+    if request.method == "POST":
         # SIGN UP LOGIC
-        payload = request.get_json(force=True)
+        i = 0
+        payload = request.form
         cursor = connection.cursor()
         querystr = '''
         select username from account
-        where username = {0};
-        '''.format(payload["username"])
+        where username = '{0}'
+        '''.format(payload["inputCustomerUsername"])
         cursor.execute(querystr)
-        if len(cursor) != 0:
+        for id in cursor:
+            i += 1
+        if not i == 0:
             return "USERNAME ALREADY EXISTS"
         cursor = connection.cursor()
-        userid = generateID("U")
-        addressid = generateID("A")
+        userid = generateID("u")
+        addressid = generateID("a")
         querystr = '''insert into customers 
-                values ({0},
-                {1},
-                {2},
-                {3},
-                {4},
-                {5}
-            );        
-        '''.format(userid, payload["inputCustomerUsername"], payload["inputFName"], payload["inputMName"],
-                   payload["inputLName"], payload["inputPhone"])
-        cursor.execute(querystr)
+                values (:userid,
+                :fname,
+                :mname,
+                :lname,
+                :phone
+            )        
+        '''
+        cursor.execute(querystr, {"userid": userid, "fname": payload["inputFName"], "mname": payload["inputMName"],
+                                  "lname": payload["inputLName"], "phone": payload["inputPhone"]})
+        connection.commit()
+        cursor = connection.cursor()
+        querystr = '''insert into account 
+                values (:password,
+                :username,
+                :userid,
+                :email
+            )        
+        '''
+        cursor.execute(querystr, {"password": payload["inputPassword"], "username": payload["inputCustomerUsername"],
+                                  "userid": userid, "email": payload["inputEmail"]})
+        connection.commit()
         cursor = connection.cursor()
         querystr = '''insert into address 
-                        values ({0},
-                        {1},
-                        {2},
-                        {3},
-                        {4},
-                        {5},
-                        {6}
-                    );        
-                '''.format(addressid, payload["inputAddress1"], payload["inputAddress2"], payload["inputCity"],
-                           payload["inputState"], payload["inputCode"], userid)
-        cursor.execute(querystr)
+                        values (:addressid,
+                        :a1,
+                        :a2,
+                        :city,
+                        :code,
+                        :state,
+                        :userid
+                    )        
+                '''
+        cursor.execute(querystr, {"addressid": addressid, "a1": payload["inputAddress1"],
+                                  "a2": payload["inputAddress2"], "city": payload["inputCity"],
+                                  "code": payload["inputCode"], "state": payload["inputState"], "userid": userid})
+        connection.commit()
         redirect_to = redirect('customer/signup/success')
         response = app.make_response(redirect_to)
         return response
@@ -204,11 +221,11 @@ def accountpage():
 def accountUpdate():
     if request.method == 'POST':
         # UPDATE LOGIC
-        payload = request.get_json(force=True)
+        payload = request.form
         cursor = connection.cursor()
         querystr = '''
                 select username from account
-                where username = {0};
+                where username = {0}
                 '''.format(payload["username"])
         cursor.execute(querystr)
         cursor = connection.cursor()
@@ -218,7 +235,7 @@ def accountUpdate():
                         {2},
                         {3},
                         {4},
-                    );        
+                    )        
                 '''.format(payload["inputCustomerUsername"], payload["inputFName"], payload["inputMName"],
                            payload["inputLName"], payload["inputPhone"])
         cursor.execute(querystr)
@@ -231,7 +248,7 @@ def accountUpdate():
                         {4},
                         {5},
                         {6}
-                    );        
+                    )        
                 '''.format(ADDRESSID, payload["inputAddress1"], payload["inputAddress2"], payload["inputCity"],
                            payload["inputState"], payload["inputCode"], USERID)
         cursor.execute(querystr)
@@ -246,13 +263,13 @@ def empSignin():
         return render_template('employee_sign_in.html')
     if request.method == 'POST':
         # SIGN IN LOGIC
-        payload = request.get_json(force=True)
+        payload = request.form
         userid = None
         cursor = connection.cursor()
         querystr = '''
             select user_id from account
             where username = {0}
-            and password = {1};
+            and password = {1}
         '''.format(payload["inputUsername"], payload["inputPassword"])
         cursor.execute(querystr)
         for id in cursor:
@@ -280,13 +297,13 @@ def productUpdate():
         #else:
         #   return "FORBIDDEN"
     if request.method == 'POST':
-        payload = request.get_json(force=True)
+        payload = request.form
         userid = None
         cursor = connection.cursor()
         querystr = '''
                     select user_id from account
                     where username = {0}
-                    and password = {1};
+                    and password = {1}
                 '''.format(payload["inputUsername"], payload["inputPassword"])
         cursor.execute(querystr)
         for id in cursor:

@@ -25,7 +25,7 @@
 
     <div class="jumbotron">
         <h2>All fields required. Already have a Target account?<h5><a href="/customer/signin">Sign in</a></h5></h2>
-        <form class="form-signin" action="/signup" method="post">
+        <form class="form-signin" action="/customer/signup" method="post">
             <label for="inputCustomerUsername" class="sr-only">Username</label>
             <input type="text" name="inputCustomerUsername" id="inputCustomerUsername" class="form-control" placeholder="Username" required autofocus>
             <p></p>
@@ -54,7 +54,7 @@
             <p></p>
             <label for="inputPhone" class="sr-only">Phone number</label>
             <input type="number" name="inputPhone" id="inputPhone" class="form-control" placeholder="Phone number" required>
-            <input type="submit" value="Submit" href="/signup/success" class="btn btn-lg btn-primary btn-block">
+            <input type="submit" value="Submit" href="/customer/signup/success" class="btn btn-lg btn-primary btn-block">
             <a href="/main"  class="btn btn-lg btn-primary btn-block">Cancel</a>
         </form>
     </div>
