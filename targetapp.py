@@ -56,37 +56,33 @@ def storepage():
 
 @app.route('/customer/cart')
 def cartpage():
-    if "auth_user" in request.cookie:
+    if "auth_user" in request.cookies:
         cursor = connection.cursor()
-        custID = request.cookie["auth_user"]
+        custID = request.cookies["auth_user"]
         cartID = None
         cart = {}
         querystr = '''
                 select user_id from cart
-                where user_id = {0}
-                '''.format(custID)
-        cursor.execute(querystr)
+                where user_id = :userid
+                '''
+        cursor.execute(querystr, userid=custID)
         for each in cursor:
             cartID = each
         if cartID is None:
             return "No CART"
         querystr = '''
                 select tax, price, shipping_price from cart 
-                where user_id = {0}
-                '''.format(cartID)
-        cursor.execute(querystr)
+                where user_id = :userid
+                '''
+        cursor.execute(querystr, userid=custID)
         for tax, price, sprice in cursor:
             cart = {"tax": tax, "price": price, "shipping_price": sprice}
         querystr = '''
-                with current_cart as(
-                select product_id from cartdetail
-                where user_id = {0}
-                )
                 select * 
-                from product 
-                 where product_id in current_cart
-                '''.format(cartID)
-        cursor.execute(querystr)
+                from product natural join ( select product_id from cartdetail
+                where user_id = :userid)
+                '''
+        cursor.execute(querystr, userid=custID)
         products = [x for x in cursor]
         cart["products"] = products
     else:
