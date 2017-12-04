@@ -34,8 +34,7 @@
 		'input_first_name',
 		 'input_middle_name',
 		'input_last_name',
-		'phone_number',
-		'date_of_birth',
+		'phone_number' 
 		);
 ```
 	
@@ -150,7 +149,6 @@
 	where user_id = 'current_user_id';
 ```
 
-
 ### Delete form cart
 ```sql
 	delete from cartdetail
@@ -192,7 +190,54 @@
 	where product_id in current_cart;
 ```
 
+### Place order (checkout cart)
+```sql
+	--auto generate auto_order_id;
+
+	with totalprice as(
+		select price from cart
+		where user_id = 'current userid'
+	) 
+	insert into orders 
+	values ('auto_order_id',
+			current_date,
+			totalprice,
+			'current userid',
+			0);
+
+	insert into orderdeatil (order_id, product_id, product_number)
+	select 'auto_order_id', product_id, product_number 
+	from cartdetail
+	where user_id = 'current_user_id';
+
+	delete from cartdetail
+	where user_id = 'current_user_id';
+
+	update cart
+	set	shipping_price = 5,
+		price = shipping_price + (select sum(product_price * product_number)
+			from product natural join cartdetail
+			where user_id = 'current_user_id'),
+		tax = price * 1.05
+	where user_id = 'current_user_id';
+
+```
+
+### Make payment order
+```sql
+	update orders 
+		set payment_status=1
+		where order_id = 'current orderid';
+```
 	
+### Cancel order
+```sql
+	delete from orderdetail
+	where order_id = 'target_order_id';
+
+	delete from orders
+	where order_id = 'target_order_id';
+```
 
 ### Search product
 ```sql
@@ -215,8 +260,6 @@
 	values ('productid',
 		'product_name',
 		'product_price',
---		'prodcut_company',
---		'product_capacity',
 		'expiration_date',
 		'upc_code');
 
@@ -245,6 +288,11 @@
 
 
 ### Check size from warehouse
+```sql
+	select product_name, product_number
+	from inventory natural join product
+	where store_id = 'target_store_id';
+```
 	
 ### Check store
 ```sql

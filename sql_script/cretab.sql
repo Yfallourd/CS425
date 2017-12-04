@@ -5,7 +5,7 @@
 	MIDDLE_NAME VARCHAR2(20),
 	LAST_NAME VARCHAR2(20) NOT NULL ,
 	PHONE_NUMBER VARCHAR2(20),
-	DATE_OF_BIRTH DATE,
+--	DATE_OF_BIRTH DATE,
 	 PRIMARY KEY (USER_ID)                                            
    );
                                                                                 
@@ -28,7 +28,9 @@
 	USERNAME VARCHAR2(20) NOT NULL ,                                       
 	USER_ID CHAR(10) ,
 	EMAIL VARCHAR2(30),
-	 PRIMARY KEY (USER_ID)                                
+	 PRIMARY KEY (USER_ID),                                
+	 FOREIGN KEY (USER_ID)
+	 REFERENCES CUSTOMERS (USER_ID) ON DELETE CASCADE
    );                                                  
                                                                                 
 
@@ -46,8 +48,6 @@
    (	PRODUCT_ID CHAR(10),
 	PRODUCT_NAME VARCHAR2(20),
 	PRODUCT_PRICE NUMERIC(10,2),
---	PRODUCT_COMPANY VARCHAR2(20),
---	PRODUCT_CAPACITY VARCHAR2(20),
 	EXPIRATION_DATE DATE,
 	UPC_CODE VARCHAR2(20),
 	 PRIMARY KEY (PRODUCT_ID)

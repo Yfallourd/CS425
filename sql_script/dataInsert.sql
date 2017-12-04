@@ -17,20 +17,37 @@ insert into cart values(0.00,0.00,0.00,'0000000004');
 insert into cart values(0.00,0.00,0.00,'0000000005');
 
 insert into product values('1111111111','toy car',19.99,DATE '2020-12-31','LJFDIHAJSDSA213HJH');
+insert into product values('1111111112','Bunny',20.00,DATE '2020-12-31','LJFJDFKLS392813HJH');
+insert into product values('1111111113','ToyCat',23.00,DATE '2020-12-31','LJFDIHAjJKLDSJFHJH');
+insert into product values('1111111114','Dragon',14.99,DATE '2020-12-31','LJFDDFJ284KJ23RKJ3');
+insert into product values('1111111115','Superman model',29.99,DATE '2020-12-31','LJFDIFJIFKDN283H32');
 
 insert into CARTDETAIL values('0000000002','1111111111',2);
 
 insert into PRODUCT_TYPE values('TOYS','Have fun!');
 
 insert into PRODUCTBELONGTO values('1111111111','TOYS');
+insert into PRODUCTBELONGTO values('1111111112','TOYS');
+insert into PRODUCTBELONGTO values('1111111113','TOYS');
+insert into PRODUCTBELONGTO values('1111111114','TOYS');
+insert into PRODUCTBELONGTO values('1111111115','TOYS');
 
 insert into BRAND values('KAA','toys manufactor','SCCC');
+insert into BRAND values('SBA','toys manufactor','SCCC');
 
 insert into BRANDBELONGTO values('1111111111','KAA');
+insert into BRANDBELONGTO values('1111111112','KAA');
+insert into BRANDBELONGTO values('1111111113','KAA');
+insert into BRANDBELONGTO values('1111111114','SBA');
+insert into BRANDBELONGTO values('1111111115','SBA');
 
 insert into store values('abc0000000','Toysmart','Chicago IL 60616','8000001111','9:00am','9:00pm','Find your toys');
 
 insert into INVENTORY values('abc0000000','1111111111',40);
+insert into INVENTORY values('abc0000000','1111111112',10);
+insert into INVENTORY values('abc0000000','1111111113',52);
+insert into INVENTORY values('abc0000000','1111111114',44);
+insert into INVENTORY values('abc0000000','1111111115',80);
 
 insert into VENDORS values('abc0000000','toys product');
 
