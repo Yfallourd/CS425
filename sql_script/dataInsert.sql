@@ -4,11 +4,11 @@ insert into customers values('0000000003','Kai',null,'Zhang','1234567890',DATE '
 insert into customers values('0000000004','Ning',null,'Jia','1234567890',DATE '2000-01-01');
 insert into customers values('0000000005','Hz',null,'Liu','1234567890',DATE '2000-01-01');
 
-insert into account values('123456','abc1','0000000001');
-insert into account values('123456','abc2','0000000002');
-insert into account values('123456','abc3','0000000003');
-insert into account values('123456','abc4','0000000004');
-insert into account values('123456','abc5','0000000005');
+insert into account values('123456','abc1','0000000001','hyang@gmail.com');
+insert into account values('123456','abc2','0000000002','hding@gmail.com');
+insert into account values('123456','abc3','0000000003','kzhang@gmail.com');
+insert into account values('123456','abc4','0000000004','njia@gmail.com');
+insert into account values('123456','abc5','0000000005','hliu@gmail.com');
 
 insert into cart values(0.00,0.00,0.00,'0000000001');
 insert into cart values(0.00,0.00,0.00,'0000000002');

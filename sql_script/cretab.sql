@@ -27,6 +27,7 @@
    (	PASSWORD VARCHAR2(20) NOT NULL ,                                   
 	USERNAME VARCHAR2(20) NOT NULL ,                                       
 	USER_ID CHAR(10) ,
+	EMAIL VARCHAR2(30),
 	 PRIMARY KEY (USER_ID)                                
    );                                                  
                                                                                 
