@@ -1,12 +1,18 @@
 from flask import request, render_template, redirect
 from flask_api import FlaskAPI, status, response
 import cx_Oracle
+import time
 
 app = FlaskAPI(__name__)
-dsnstr = cx_Oracle.makedsn("fourier.cs.iit.edu", "1521", "orcl")
+dsnstr = cx_Oracle.makedsn("krr.science", "1521", "orcl")
 
 
-# connection = cx_Oracle.connect(user="hyang59", password="YOURORACLEPASSWORD", dsn=dsnstr)
+connection = cx_Oracle.connect(user="lhz", password="cs170901", dsn=dsnstr)
+
+
+def generateID(typetoken):
+    return typetoken+str(int(time.time()))[1:]
+
 
 @app.route('/')
 def redirect_to_main():
@@ -118,7 +124,7 @@ def signinpage():
             select user_id from account
             where username = {0}
             and password = {1};
-        '''.format(payload["username"], payload["password"])
+        '''.format(payload["inputUsername"], payload["inputPassword"])
         cursor.execute(querystr)
         for id in cursor:
             userid = id
@@ -145,16 +151,31 @@ def signuppage():
         if len(cursor) != 0:
             return "USERNAME ALREADY EXISTS"
         cursor = connection.cursor()
-        querystr = '''insert into customers
+        userid = generateID("U")
+        addressid = generateID("A")
+        querystr = '''insert into customers 
                 values ({0},
                 {1},
                 {2},
                 {3},
                 {4},
-                {5},
+                {5}
             );        
-        '''.format(payload["inputCustomerUsername"], payload["inputFName"], payload["inputMName"],
-                   payload["inputLName"], payload["inputPhone"], payload["dateofbirth"])
+        '''.format(userid, payload["inputCustomerUsername"], payload["inputFName"], payload["inputMName"],
+                   payload["inputLName"], payload["inputPhone"])
+        cursor.execute(querystr)
+        cursor = connection.cursor()
+        querystr = '''insert into address 
+                        values ({0},
+                        {1},
+                        {2},
+                        {3},
+                        {4},
+                        {5},
+                        {6}
+                    );        
+                '''.format(addressid, payload["inputAddress1"], payload["inputAddress2"], payload["inputCity"],
+                           payload["inputState"], payload["inputCode"], userid)
         cursor.execute(querystr)
         redirect_to = redirect('customer/signup/success')
         response = app.make_response(redirect_to)
@@ -179,7 +200,7 @@ def accountpage():
     return render_template('update_customerinfo.html')
 
 
-@app.route('/customer/account/update', methods=['GET', 'POST'])
+@app.route('/customer/account/update', methods=['POST'])
 def accountUpdate():
     if request.method == 'POST':
         # UPDATE LOGIC
@@ -197,22 +218,45 @@ def accountUpdate():
                         {2},
                         {3},
                         {4},
-                        {5},
                     );        
-                '''.format(payload["userid"], payload["firstname"], payload["middlename"],
-                           payload["lastname"], payload["phoneno"], payload["dateofbirth"])
+                '''.format(payload["inputCustomerUsername"], payload["inputFName"], payload["inputMName"],
+                           payload["inputLName"], payload["inputPhone"])
+        cursor.execute(querystr)
+        cursor = connection.cursor()
+        querystr = '''insert into address 
+                        values ({0},
+                        {1},
+                        {2},
+                        {3},
+                        {4},
+                        {5},
+                        {6}
+                    );        
+                '''.format(ADDRESSID, payload["inputAddress1"], payload["inputAddress2"], payload["inputCity"],
+                           payload["inputState"], payload["inputCode"], USERID)
         cursor.execute(querystr)
         redirect_to_main = redirect('/main')
         response = app.make_response(redirect_to_main)
         return response
 
 
-@app.route('/employee/signin', methods=['GET', 'PUT'])
+@app.route('/employee/signin', methods=['GET', 'POST'])
 def empSignin():
     if request.method == 'GET':
         return render_template('employee_sign_in.html')
     if request.method == 'POST':
         # SIGN IN LOGIC
+        payload = request.get_json(force=True)
+        userid = None
+        cursor = connection.cursor()
+        querystr = '''
+            select user_id from account
+            where username = {0}
+            and password = {1};
+        '''.format(payload["inputUsername"], payload["inputPassword"])
+        cursor.execute(querystr)
+        for id in cursor:
+            userid = id
         redirect_to_main = redirect('/main')
         response = app.make_response(redirect_to_main)
         response.set_cookie('auth_user', value='')  # Add the username arg
@@ -222,18 +266,35 @@ def empSignin():
 
 @app.route('/employee/product')
 def productCheck():
-    if ("employee" in request.cookies) & (request.cookie["employee"] == "True"):
-        return render_template("employee_check_product.html")
-    else:
-        return "FORBIDDEN"
+    #if ("employee" in request.cookies) & (request.cookies["employee"] == "True"):
+    return render_template("employee_check_product.html")
+    #else:
+        #return "FORBIDDEN"
 
 
-@app.route('/employee/product/update')
+@app.route('/employee/product/update', methods=['GET', 'POST'])
 def productUpdate():
-    if ("employee" in request.cookies) & (request.cookie["employee"] == "True"):
+    if request.method == 'GET':
+        #if ("employee" in request.cookies) & (request.cookies["employee"] == "True"):
         return render_template("update_productinfo.html")
-    else:
-        return "FORBIDDEN"
+        #else:
+        #   return "FORBIDDEN"
+    if request.method == 'POST':
+        payload = request.get_json(force=True)
+        userid = None
+        cursor = connection.cursor()
+        querystr = '''
+                    select user_id from account
+                    where username = {0}
+                    and password = {1};
+                '''.format(payload["inputUsername"], payload["inputPassword"])
+        cursor.execute(querystr)
+        for id in cursor:
+            userid = id
+        redirect_to_main = redirect('/main')
+        response = app.make_response(redirect_to_main)
+        response.set_cookie('auth_user', value='')  # Add the username arg
+        response.set_cookie('employee', value='True')
 
 
 if __name__ == "__main__":

@@ -4,13 +4,6 @@
     <list default="true" id="572994fd-5152-450e-96b6-0862c50c8028" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/targetapp.py" afterPath="$PROJECT_DIR$/targetapp.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/cart.html" afterPath="$PROJECT_DIR$/templates/cart.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/customer_sign_in.html" afterPath="$PROJECT_DIR$/templates/customer_sign_in.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/customer_sign_up.html" afterPath="$PROJECT_DIR$/templates/customer_sign_up.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/employee_sign_in.html" afterPath="$PROJECT_DIR$/templates/employee_sign_in.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/order.html" afterPath="$PROJECT_DIR$/templates/order.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/stores.html" afterPath="$PROJECT_DIR$/templates/stores.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/update_customerinfo.html" afterPath="$PROJECT_DIR$/templates/update_customerinfo.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,13 +14,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="targetapp.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="targetapp.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/targetapp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="160" column="23" lean-forward="true" selection-start-line="160" selection-start-column="23" selection-end-line="160" selection-end-column="23" />
+            <state relative-caret-position="-378">
+              <caret line="177" column="78" lean-forward="false" selection-start-line="177" selection-start-column="78" selection-end-line="177" selection-end-column="78" />
               <folding>
                 <element signature="e#0#52#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Tester.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../CS538/Project/Tester.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="6" column="7" lean-forward="false" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Solver.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../CS538/Project/Solver.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="36">
+              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -42,6 +57,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/targetapp.py" />
+        <option value="$PROJECT_DIR$/../CS538/Project/Tester.py" />
       </list>
     </option>
   </component>
@@ -83,6 +99,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CS538/Project/Solver.py" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -167,11 +184,29 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/targetapp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="160" column="23" lean-forward="true" selection-start-line="160" selection-start-column="23" selection-end-line="160" selection-end-column="23" />
+        <state relative-caret-position="-378">
+          <caret line="177" column="78" lean-forward="false" selection-start-line="177" selection-start-column="78" selection-end-line="177" selection-end-column="78" />
           <folding>
             <element signature="e#0#52#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../CS538/Project/Solver.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../CS538/Project/Tester.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="7" lean-forward="false" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+          <folding />
         </state>
       </provider>
     </entry>
