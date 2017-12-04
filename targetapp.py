@@ -50,7 +50,7 @@ def storepage():
     cursor = connection.cursor()
     querystr = "select store_name from store"
     cursor.execute(querystr)
-    stores = [x for x in cursor]
+    stores = [x[0] for x in cursor]
     return render_template('stores.html', stores=stores)
 
 
@@ -96,18 +96,18 @@ def cartpage():
 
 @app.route('/customer/order')
 def orderpage():
-    if "auth_user" in request.cookie:
+    if "auth_user" in request.cookies:
         cursor = connection.cursor()
-        custID = request.cookie["auth_user"]
+        custID = request.cookies["auth_user"]
         querystr = '''
-                select * from order 
-                where user_id = {0}
-                '''.format(custID)
-        cursor.execute(querystr)
-        orders = [x for x in cursor]
+                select * from orders 
+                where user_id = :userid
+                '''
+        cursor.execute(querystr, {"userid": custID})
+        order = [x for x in cursor]
     else:
         return "PLEASE LOG IN"
-    return render_template('orders.html', orders=orders)
+    return render_template('order.html', orders=order)
 
 
 @app.route('/customer/signin', methods=['GET', 'POST'])
