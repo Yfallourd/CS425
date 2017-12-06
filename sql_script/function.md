@@ -7,12 +7,12 @@
 	--input username
 	--input password
 
-	select user_id form account
+	select user_id from account
 		where username = 'input_username' 
 		and password = 'input_password';
 
 --login use email
-	select user_id form account
+	select user_id from account
 		where email = 'input_email' 
 		and password = 'input_password';
 
@@ -25,7 +25,7 @@
 	--input information;
 	
 	--examine the same username
-	select username form account
+	select username from account
 		where username = 'input username';
 
 	--if username is unique, then create a new account.
@@ -113,7 +113,9 @@
 		price = shipping_price + (select sum(product_price * product_number)
 			from product natural join cartdetail
 			where user_id = 'current_user_id'),
-		tax = price * 1.05
+        tax = 0.05*(select sum(product_price * product_number)
+            from product natural join cartdetail
+            where user_id = 'current userid')
 	where user_id = 'current_user_id';
 ```
 
@@ -129,7 +131,9 @@
 		price = shipping_price + (select sum(product_price * product_number)
 			from product natural join cartdetail
 			where user_id = 'current_user_id'),
-		tax = price * 1.05
+        tax = 0.05*(select sum(product_price * product_number)
+            from product natural join cartdetail
+            where user_id = 'current userid')
 	where user_id = 'current_user_id';
 ```
 
@@ -145,11 +149,13 @@
 		price = shipping_price + (select sum(product_price * product_number)
 			from product natural join cartdetail
 			where user_id = 'current_user_id'),
-		tax = price * 1.05
+        tax = 0.05*(select sum(product_price * product_number)
+            from product natural join cartdetail
+            where user_id = 'current userid')
 	where user_id = 'current_user_id';
 ```
 
-### Delete form cart
+### Delete from cart
 ```sql
 	delete from cartdetail
 	where user_id = 'current_user_id'
@@ -160,7 +166,9 @@
 		price = shipping_price + (select sum(product_price * product_number)
 			from product natural join cartdetail
 			where user_id = 'current_user_id'),
-		tax = price * 1.05
+        tax = 0.05*(select sum(product_price * product_number)
+            from product natural join cartdetail
+            where user_id = 'current userid')
 	where user_id = 'current_user_id';
 ```
 
@@ -171,56 +179,49 @@
 	where user_id = 'current userid';
 	
 	--get cart information
-	select tax form cart 
+	select tax from cart 
 	where user_id = 'current userid';
 	
-	select price form cart 
+	select price from cart 
 	where user_id = 'current userid';
 
-	select shipping_price form cart 
+	select shipping_price from cart 
 	where user_id = 'current userid';
 
 	--get product information
-	with current_cart as(
-		select product_id form cartdetail
-		where user_id = 'current userid'
-	)
-	select * 
-	from product 
-	where product_id in current_cart;
+	select * from product natural join 
+		(select product_id from cartdetail 
+		where user_id = 'current userid');
 ```
 
 ### Place order (checkout cart)
 ```sql
 	--auto generate auto_order_id;
+    insert into orders
+    values ('auto_order_id',
+            current_date,
+            (select price from cart
+            where user_id = 'current userid'),
+            'current userid',
+            0);
+  
+    insert into orderdetail (order_id, product_id, product_number
+    select 'auto_order_id', product_id, product_number
+    from cartdetail
+    where user_id = 'current_user_id';
 
-	with totalprice as(
-		select price from cart
-		where user_id = 'current userid'
-	) 
-	insert into orders 
-	values ('auto_order_id',
-			current_date,
-			totalprice,
-			'current userid',
-			0);
+    delete from cartdetail
+    where user_id = 'current userid';
 
-	insert into orderdeatil (order_id, product_id, product_number)
-	select 'auto_order_id', product_id, product_number 
-	from cartdetail
-	where user_id = 'current_user_id';
-
-	delete from cartdetail
-	where user_id = 'current_user_id';
-
-	update cart
-	set	shipping_price = 5,
-		price = shipping_price + (select sum(product_price * product_number)
-			from product natural join cartdetail
-			where user_id = 'current_user_id'),
-		tax = price * 1.05
-	where user_id = 'current_user_id';
-
+    update cart
+    set shipping_price = 5,
+        price = shipping_price + (select sum(product_price * product_number)
+            from product natural join cartdetail
+            where user_id = 'current userid'),
+        tax = 0.05*(select sum(product_price * product_number)
+            from product natural join cartdetail
+            where user_id = 'current userid')
+    where user_id = 'current userid';
 ```
 
 ### Make payment order
@@ -250,7 +251,7 @@
 
 ### Check product
 ```sql
-	select * form product;
+	select * from product;
 ```
 
 

@@ -19,8 +19,10 @@
 	PAYMENT_STATUS NUMERIC(1) DEFAULT 0 NOT NULL,
 	 PRIMARY KEY (ORDER_ID) ,
 	 FOREIGN KEY (USER_ID)
-	 REFERENCES CUSTOMERS (USER_ID) ON DELETE CASCADE
+	 REFERENCES CUSTOMERS (USER_ID) ON DELETE CASCADE,
+	CHECK(PAYMENT_STATUS IN (0,1)
    );
+-- status 0 means unpaid, 1 means paid.
                                                                                 
 
   CREATE TABLE ACCOUNT                                              
